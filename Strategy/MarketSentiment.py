@@ -13,13 +13,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import tushare as ts
 
 
-def market_signal_decider(rd_sig, indices_sig, callfunc):
+def market_signal_decider(rd_sig, indices_sig):
     """
     根据涨跌统计和指数决定此刻大盘信号，规则：看空一票看空，看多全票看多
 
     :param rd_sig: 来自decide_by_surged_and_decline()的信号
     :param indices_sig: 来自decide_by_indices()的信号
-    :param callfunc: 用于通知信号变更的函数，只能传递一个参数final
     :return: string
     """
     final = None
@@ -35,8 +34,6 @@ def market_signal_decider(rd_sig, indices_sig, callfunc):
     if rd_sig != indices_sig:
         if rd_sig == 'N' or indices_sig == 'N':
             final = 'N'
-
-    callfunc(final)
     return final
 
 
