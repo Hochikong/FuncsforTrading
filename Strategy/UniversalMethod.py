@@ -357,6 +357,24 @@ def judges(config, text):
             return 'N'
 
 
+def all_trading_day(year):
+    """
+    从tushare读取交易日数据，根据年返回当年所有交易日
+    :param year: string,e.g '2018'
+    :return: list
+    """
+    df = tushare.trade_cal()
+    days = df['calendarDate'].tolist()
+    is_trading = df['isOpen'].tolist()
+    thisyear = [i for i in zip(days, is_trading) if year in i[0]]
+    thisyear_tradingday = [pair for pair in thisyear if pair[1] == 1]
+    thisyear_tradingday = [d[0] for d in thisyear_tradingday]
+    return thisyear_tradingday
+
+
+
+
+
 
 
 
