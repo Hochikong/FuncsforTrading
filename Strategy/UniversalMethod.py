@@ -327,7 +327,6 @@ def delete_data_tail(text):
         return delete_data_tail(text[tmppost+1:])
 
 
-@count_time
 def judges(config, text):
     """
     通过三个NLP平台分析文本并投票决定情绪,分别调用百度AI，BosonNLP和腾讯文智的API
