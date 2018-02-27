@@ -19,7 +19,7 @@ def market_signal_decider(rd_sig, indices_sig, callfunc):
 
     :param rd_sig: 来自decide_by_surged_and_decline()的信号
     :param indices_sig: 来自decide_by_indices()的信号
-    :param callfunc: 用于通知信号变更的函数
+    :param callfunc: 用于通知信号变更的函数，只能传递一个参数final
     :return: string
     """
     final = None
@@ -36,7 +36,7 @@ def market_signal_decider(rd_sig, indices_sig, callfunc):
         if rd_sig == 'N' or indices_sig == 'N':
             final = 'N'
 
-    callfunc()
+    callfunc(final)
     return final
 
 
