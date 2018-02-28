@@ -167,18 +167,21 @@ def ids_func(pair):
     ltday = pair[1]
     n = pair[2]
     MA = get_sma(code, ltday, n)
-    if MA['ma5'][-1] > MA['ma10'][-1]:
-        # 根据MA5的趋势判断
-        if ma_down(MA['ma5']):
-            return False
-        else:
-            return True
+    if len(MA['ma5']) < 1 or len(MA['ma10']) < 1:
+        return False
     else:
-        # 根据是否为热点判断
-        if hot:
-            return True
+        if MA['ma5'][-1] > MA['ma10'][-1]:
+            # 根据MA5的趋势判断
+            if ma_down(MA['ma5']):
+                return False
+            else:
+                return True
         else:
-            return False
+            # 根据是否为热点判断
+            if hot:
+                return True
+            else:
+                return False
 
 
 @deprecated_warning
