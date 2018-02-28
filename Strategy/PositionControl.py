@@ -10,9 +10,9 @@ import requests
 import json
 
 
-def get_balance(url, token):
+def get_accounti(url, token):
     """
-    从交易服务器根据指定的token获取用户账户余额
+    从交易服务器根据指定的token获取用户账户余额和收益信息
 
     :param url: 完整的服务器地址，可能需要加上端口号，e.g. http://localhost:5000
     :param token: 用户专属的trade token
@@ -20,10 +20,16 @@ def get_balance(url, token):
     """
     header = {'trade_token': token}
     endpoint = url+"/user"
+
     payload = json.dumps({'query': 'user'})
     result = requests.post(endpoint, data=payload, headers=header)
     balance = result.json()
-    return balance
+
+    profit_payload = json.dumps({'query': 'real_time_profit'})
+    profit_result = requests.post(endpoint, data=profit_payload, headers=header)
+    profit = profit_result.json()
+
+    return {'balance': balance, 'profit': profit}
 
 
 def balance_split(balance_data):
