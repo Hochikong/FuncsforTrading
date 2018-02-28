@@ -372,7 +372,7 @@ def all_trading_day(year):
     return thisyear_tradingday
 
 
-def find(text):
+def findcodes(text):
     """
     从利好新闻中找股票代码
     :param text:
