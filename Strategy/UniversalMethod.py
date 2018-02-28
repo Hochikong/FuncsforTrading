@@ -372,6 +372,21 @@ def all_trading_day(year):
     return thisyear_tradingday
 
 
+def find(text):
+    """
+    从利好新闻中找股票代码
+    :param text:
+    :return:
+    """
+    lt = list(text)
+    codes = []
+    for i in lt:
+        current_post = lt.index(i)
+        if i == '（':
+            codes.append(''.join(lt[current_post+1: current_post+7]))
+        lt = lt[current_post:]
+    return codes
+
 
 
 
