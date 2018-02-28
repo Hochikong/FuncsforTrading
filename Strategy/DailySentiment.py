@@ -45,7 +45,7 @@ def get_content(url):
     """
     page = requests.get(url, timeout=5).text
     soup = BeautifulSoup(page, 'lxml')
-    news_container = soup.find(attrs={'class':'main-text atc-content'})
+    news_container = soup.find(attrs={'class': 'main-text atc-content'})
     all_paragraph = news_container.find_all('p')
     all_paragraph = [p for p in all_paragraph if len(p.get_text()) > 0]
     content = all_paragraph[:-1]

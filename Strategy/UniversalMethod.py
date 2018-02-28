@@ -11,6 +11,8 @@ from QcloudApi.qcloudapi import QcloudApi
 from aip import AipNlp
 from bosonnlp import BosonNLP
 from concurrent.futures import ThreadPoolExecutor
+from .DailySentiment import get_today_news_urls, get_content
+from functools import reduce
 from time import time
 import tushare
 import json
@@ -350,11 +352,16 @@ def judges(config, text):
     # return [post_votes, nega_votes]
     pv = [i for i in post_votes if i > 0.5]
     nv = [x for x in nega_votes if x > 0.5]
+    result = None
     if len(pv)/len(post_votes) > 1/3:
-        return 'P'
+        result = 'P'
     else:
         if len(nv)/len(nega_votes) > 1/3:
-            return 'N'
+            result = 'N'
+    if result is None:
+        return 'N'
+    else:
+        return result
 
 
 def all_trading_day(year):
@@ -387,6 +394,52 @@ def findcodes(text):
         lt = lt[current_post:]
     return codes
 
+
+def aipjudge(text, aipinstance):
+    """
+    调用百度AI NLP检查文本情绪
+    :param text: 本文
+    :param aipinstance:  百度AI的NLP实例
+    :return: string
+    """
+    result = aipinstance.sentimentClassify(text)['items'][0]
+    if result['positive_prob'] > result['negative_prob']:
+        return 'P'
+    else:
+        return 'N'
+
+
+def codes_from_positive_news(today, config):
+    """
+    从当日的利好新闻里获取股票代码
+    :param today: string
+    :param config: dict
+    :return:
+    """
+    # 基于利好新闻筛选的股票
+    news_url = get_today_news_urls(today, 'n')
+    contents = [get_content(nurl) for nurl in news_url]
+    # 保留有股票代码的段落
+    contents = [[p for p in te if '（' in p or '）' in p] for te in contents]
+    # 去除特殊字符
+    contents = [[''.join(paragraph.split()) for paragraph in c] for c in contents]
+    # 去除长度为0的
+    contents = [content for content in contents if len(content) > 0]
+    # 判断情绪
+    sentiment_result = [[judges(config, text) for text in unit] for unit in contents]
+
+    # 从利好新闻里挖掘股票代码
+    codes = []
+    for i, unit in enumerate(sentiment_result):
+        tmp = []
+        for u in zip(unit, contents[i]):
+            if u[0] == 'P':
+                tmp.append(findcodes(u[1]))
+            else:
+                pass
+        codes.append(tmp)
+
+    return codes
 
 
 
