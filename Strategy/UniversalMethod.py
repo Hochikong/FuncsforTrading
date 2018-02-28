@@ -439,6 +439,9 @@ def codes_from_positive_news(today, config):
                 pass
         codes.append(tmp)
 
+    # 整合
+    codes = [reduce(lambda x, y: x + y, l)for l in codes]
+
     return codes
 
 
