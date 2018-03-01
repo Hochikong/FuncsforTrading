@@ -156,10 +156,10 @@ class Headless(object):
     启动headless firefox用于爬取数据涨跌数据
 
     """
-    def __init__(self, geckopath, timeout, url):
+    def __init__(self, geckopath, timeout):
         self.browser = headless_initial(geckopath, timeout)
         self.timeout = timeout
-        self.url = url
+        self.url = 'http://q.10jqka.com.cn/'
 
     def get_surged_and_decline(self):
         """
