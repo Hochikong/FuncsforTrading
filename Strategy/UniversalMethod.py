@@ -167,7 +167,7 @@ class Wenzhi(object):
             raise KeyError("No param:content in content")
 
         result = self.service.call(action, content)
-        return json.loads(result)
+        return json.loads(result.decode())
 
     def text_keywords(self, content):
         """
