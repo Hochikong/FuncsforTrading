@@ -423,7 +423,7 @@ def codes_from_positive_news(today, config):
     news_url = get_today_news_urls(today, 'n')
     contents = [get_content(nurl) for nurl in news_url]
     # 保留有股票代码的段落
-    contents = [[p for p in te if '（' in p or '）' in p] for te in contents]
+    contents = [[p for p in te if '（' in p or '）' in p] for te in contents if te is not None]
     # 去除特殊字符
     contents = [[''.join(paragraph.split()) for paragraph in c] for c in contents]
     # 去除长度为0的
