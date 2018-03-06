@@ -224,8 +224,8 @@ def general_ma_filterv2(worker, codes, ltday):
         tmp.append(pool.submit(ids_func, i))
     result = []
     for i in zip(pair_for_map, tmp):
-        # default timeout 5 seconds
-        if i[1].result(5):
+        # default timeout 20 seconds
+        if i[1].result(20):
             result.append(i[0])
         else:
             pass

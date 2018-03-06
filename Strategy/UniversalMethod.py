@@ -339,6 +339,7 @@ def judges(config, text):
     :param text: string
     :return: string
     """
+    default_timeout = 10
     w = Wenzhi(config['tencent'][0], config['tencent'][1], 'gz', 'POST')
     cli = AipNlp(config['baidu'][0], config['baidu'][1], config['baidu'][2])
     bo = BosonNLP(config['boson'][0])
@@ -346,7 +347,9 @@ def judges(config, text):
     candidate1 = pool.submit(w.text_sentiment, {'content': text})
     candidate2 = pool.submit(cli.sentimentClassify, text)
     candidate3 = pool.submit(bo.sentiment, text)
-    result = [candidate1.result(), candidate2.result(), candidate3.result()]
+    result = [candidate1.result(default_timeout),
+              candidate2.result(default_timeout),
+              candidate3.result(default_timeout)]
     post_votes = [result[0]['positive'], result[1]['items'][0]['positive_prob'], result[2][0][0]]
     nega_votes = [result[0]['negative'], result[1]['items'][0]['negative_prob'], result[2][0][1]]
     # return [post_votes, nega_votes]
