@@ -291,14 +291,17 @@ def get_sma(code, end, n):
     :return:
     """
     df = tushare.get_hist_data(code, start=the_date_n_day_before(n+15, end), end=end)
-    split_by_n = df.head(n)
-    ma5_before_reverse = split_by_n['ma5'].values.tolist()
-    ma10_before_reverse = split_by_n['ma10'].values.tolist()
-    ma5_before_reverse.reverse()  # 列表中前面的元素是较前日期的数据，最后一个元素是end日的均线数据
-    ma10_before_reverse.reverse()  # 同MA5
-    result = {'ma5': ma5_before_reverse, 'ma10': ma10_before_reverse,
-              'comment': "the last element of 'maN' is the latest MA"}  # after reverse
-    return result
+    if df is not None:
+        split_by_n = df.head(n)
+        ma5_before_reverse = split_by_n['ma5'].values.tolist()
+        ma10_before_reverse = split_by_n['ma10'].values.tolist()
+        ma5_before_reverse.reverse()  # 列表中前面的元素是较前日期的数据，最后一个元素是end日的均线数据
+        ma10_before_reverse.reverse()  # 同MA5
+        result = {'ma5': ma5_before_reverse, 'ma10': ma10_before_reverse,
+                  'comment': "the last element of 'maN' is the latest MA"}  # after reverse
+        return result
+    else:
+        pass
 
 
 def delete_data_head(text):
