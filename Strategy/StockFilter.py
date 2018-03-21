@@ -72,6 +72,12 @@ class HotSpot(object):
 
         # 定位热点新闻元素
         hl.get(self.url)
+
+        # 处理未加载完本日热点的页面
+        load = hl.find_element_by_class_name('gn-load')
+        if load:
+            load.click()
+
         container = WebDriverWait(hl, self.timeout).until(EC.presence_of_element_located((By.XPATH, container_xpath)))
         hotspots = container.find_elements_by_xpath(subelement_in_container_xpath)
 
