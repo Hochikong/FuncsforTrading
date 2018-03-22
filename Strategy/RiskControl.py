@@ -27,6 +27,21 @@ def get_return_rate(url, token):
     return return_rates
 
 
+def get_orders(url, token):
+    """
+    从交易服务器根据指定的token获取用户的收益统计数据
+
+    :param url: 完整的服务器地址，可能需要加上端口号，e.g. http://localhost:5000
+    :param token: 用户的trade token
+    :return: dict
+    """
+    header = {'trade_token': token}
+    endpoint = url + "/order"
+    result = requests.get(endpoint, headers=header)
+    remain_orders = result.json()
+    return remain_orders
+
+
 def risk_control(stock_detail):
     """
     把get_return_rate里的stocks_rateR的个股收益等数据拿出来进行止损判断
